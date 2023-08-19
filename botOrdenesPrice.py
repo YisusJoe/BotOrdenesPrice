@@ -1,37 +1,40 @@
-from binance.client import Client
-import requests
 import time
 
-import orderBookModel
 import priceController
-
-api_key = '<tu clave API>'
-api_secret = '<tu clave secreta>'
-client = Client(api_key, api_secret)
+import Model.orderBookModel as orderBookModel
+import Controller.orderBookController as orderBookController
+import Model.rangeBookModel as rangeBookModel
 
 symbol = 'MATICUSDT'
 depth = 5000 # profundidad de 10 niveles
 exchange = 'binance_futures' # intercambio de futuros de Binance
-
-order_book = client.futures_order_book(symbol=symbol, depth=depth, exchange=exchange)
-
-# bids = sorted(order_book['bids'])
-# asks = order_book['asks']
-
-def funcion1():
-    
-    print(symbol)
-    gap = 0.001
-    priceController.precioVenta(symbol,depth,exchange,gap)
-    priceController.precioCompra(symbol,depth,exchange,gap)
   
 def main():
 
-    print(symbol)
-    Va,Vb = priceController.precioVenta(symbol,depth,exchange)
-    Ca,Cb = priceController.precioCompra(symbol,depth,exchange)
+    # print(symbol)
+    # Va,Vb = priceController.precioVenta(symbol,depth,exchange)
+    # Ca,Cb = priceController.precioCompra(symbol,depth,exchange)
 
-    priceController.longShort(Ca,Cb,Va,Vb)
+    # priceController.longShort(Ca,Cb,Va,Vb)
+
+    # NEW CODE
+
+    orderBook = orderBookController.getTotalLibro(symbol,depth,exchange)
+    print(orderBook['bids'])
+    objranges = rangeBookModel.rangosEstrategia()
+    # ragesEstrategia = objranges.getRangosEstrategia(orderBook)
+
+    # orderBookFull = orderBookController.getTotalLibro(symbol,depth,exchange)
+    # print(orderBookFull)
+    # orderBookCompra = orderBookController.getOrdenesCompra(symbol,depth,exchange)
+    # print(orderBookCompra)
+
+    # objOrderBook.getOrdenesCompra()
+    # orderBookCompra = objOrderBook.ordenesCompra
+    # # print(orderBookCompra)
+    # objOrderBook.getOrdebesVentas()
+    # OrderBookVenta = objOrderBook.ordenesVenta
+    # print(OrderBookVenta)
 
     time.sleep(1)
 
