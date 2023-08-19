@@ -1,9 +1,8 @@
 import time
 
-import priceController
 import Model.orderBookModel as orderBookModel
 import Controller.orderBookController as orderBookController
-import Model.rangeBookModel as rangeBookModel
+import Controller.rangeBookController as rangeBookController
 
 symbol = 'MATICUSDT'
 depth = 5000 # profundidad de 10 niveles
@@ -11,31 +10,27 @@ exchange = 'binance_futures' # intercambio de futuros de Binance
   
 def main():
 
-    # print(symbol)
-    # Va,Vb = priceController.precioVenta(symbol,depth,exchange)
-    # Ca,Cb = priceController.precioCompra(symbol,depth,exchange)
-
-    # priceController.longShort(Ca,Cb,Va,Vb)
-
-    # NEW CODE
-
     orderBook = orderBookController.getTotalLibro(symbol,depth,exchange)
-    print(orderBook['bids'])
-    objranges = rangeBookModel.rangosEstrategia()
-    # ragesEstrategia = objranges.getRangosEstrategia(orderBook)
+    # print(orderBook)
+    rangesEstategia = rangeBookController.getRangoEstrategia(orderBook)
+    
+    print(f'Precio: {rangesEstategia.rangoCompraA} cantidad: {rangesEstategia.cantidadCompraA}')
+    print(f'Precio: {rangesEstategia.rangoCompraB} cantidad: {rangesEstategia.cantidadCompraB}')
+    print(f'Precio: {rangesEstategia.rangoVentaA} cantidad: {rangesEstategia.cantidadVentaA}')
+    print(f'Precio: {rangesEstategia.rangoVentaB} cantidad: {rangesEstategia.cantidadVentaB}')
+   
+    def longShort(dolar_buy_a,dolar_buy_b,dolar_sell_a,dolar_sell_b):
 
-    # orderBookFull = orderBookController.getTotalLibro(symbol,depth,exchange)
-    # print(orderBookFull)
-    # orderBookCompra = orderBookController.getOrdenesCompra(symbol,depth,exchange)
-    # print(orderBookCompra)
+        if(abs((dolar_buy_a - dolar_buy_b)) < abs((dolar_sell_b - dolar_sell_a))):
 
-    # objOrderBook.getOrdenesCompra()
-    # orderBookCompra = objOrderBook.ordenesCompra
-    # # print(orderBookCompra)
-    # objOrderBook.getOrdebesVentas()
-    # OrderBookVenta = objOrderBook.ordenesVenta
-    # print(OrderBookVenta)
+            print("El precio de compra es más viable")
 
+        if(abs((dolar_sell_b - dolar_sell_a)) < abs((dolar_buy_a - dolar_buy_b))):
+
+            print("El precio de venta es mas viable")
+
+    longShort(rangesEstategia.rangoCompraA,rangesEstategia.rangoCompraB,rangesEstategia.rangoVentaA,rangesEstategia.rangoVentaB)        
+    
     time.sleep(1)
 
     

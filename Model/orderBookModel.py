@@ -24,12 +24,12 @@ class orderBook:
         self.ordenesCompra = sorted(self.ordenesTotales['bids'])
         # down_book_buy = min(bids)[0]
         # up_book_buy = max(bids)[0]
-        # # return bids,down_book_buy,up_book_buy
+        # return bids,down_book_buy,up_book_buy
 
     def getOrdenesVentas(self):
 
         print('Obtuve ordenes de ventas')
         self.ordenesVenta = self.ordenesTotales['asks']
-        # down_book_sell = min(self.ordenesVenta)[0]
-        # up_book_sell = max(self.ordenesVenta)[0]
-        # # return asks,down_book_sell,up_book_sell
+        # down_book_sell = min(asks)[0]
+        # up_book_sell = max(asks)[0]
+        # return asks,down_book_sell,up_book_sell
