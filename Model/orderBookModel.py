@@ -15,12 +15,12 @@ class orderBook:
 
     def getTotalLibro(self,symbol,depth,exchange):
 
-        print('Obtive el libro total de ordenes')
+        # print('Obtive el libro total de ordenes')
         self.ordenesTotales = client.futures_order_book(symbol=symbol, depth=depth, exchange=exchange)
 
     def getOrdenesCompra(self):
 
-        print('Obtuve ordenes de compras')
+        # print('Obtuve ordenes de compras')
         self.ordenesCompra = sorted(self.ordenesTotales['bids'])
         # down_book_buy = min(bids)[0]
         # up_book_buy = max(bids)[0]
@@ -28,7 +28,7 @@ class orderBook:
 
     def getOrdenesVentas(self):
 
-        print('Obtuve ordenes de ventas')
+        # print('Obtuve ordenes de ventas')
         self.ordenesVenta = self.ordenesTotales['asks']
         # down_book_sell = min(asks)[0]
         # up_book_sell = max(asks)[0]

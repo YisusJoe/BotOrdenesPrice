@@ -19,7 +19,7 @@ class rangosEstrategia:
 
     def getRangosEstrategia(self, orderBook):
 
-        print(f'Entre a obtener los rangos del orderBook')
+        # print(f'Entre a obtener los rangos del orderBook')
 
         self.rangoCompraA, self.cantidadCompraA = self.rangosAB(orderBook['bids'], self.rangeMinCompra, self.rangeMaxCompra, 0.001, 0)
         self.rangoCompraB, self.cantidadCompraB = self.rangosAB(orderBook['bids'], self.rangeMinCompra, self.rangeMaxCompra, 0.01, 0)

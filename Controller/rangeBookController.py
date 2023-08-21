@@ -2,7 +2,7 @@ import Model.rangeBookModel as rangeBookModel
 
 def getRangoEstrategia(orderBook):
 
-    print('Retorno de puntos de clave estrategia')
+    # print('Retorno de puntos de clave estrategia')
     objranges = rangeBookModel.rangosEstrategia()
     objranges.rangeMaxMin(orderBook)
     objranges.getRangosEstrategia(orderBook)
