@@ -1,21 +1,16 @@
-import Model.orderBookModel as orderBookModel
+# import Model.orderBookModel as orderBookModel
+from Model.orderBookModel import MdlLibro 
 
-def getTotalLibro(symbol,depth,exchange):
+class Libro:
 
-    objOrderBook = orderBookModel.orderBook()
-    objOrderBook.getTotalLibro(symbol,depth,exchange)
-    return objOrderBook.ordenesTotales
+    def __init__(self,symbol,limit):
+        self.libroTotal = MdlLibro(symbol=symbol,limit=limit)
 
-def getOrdenesCompra(symbol,depth,exchange):
-
-    objOrderBook = orderBookModel.orderBook()
-    objOrderBook.getTotalLibro(symbol,depth,exchange)
-    objOrderBook.getOrdenesCompra()
-    return objOrderBook.ordenesCompra
-
-def getOrdenesVentas(symbol,depth,exchange):
-
-    objOrderBook = orderBookModel.orderBook()
-    objOrderBook.getTotalLibro(symbol,depth,exchange)
-    objOrderBook.getOrdebesVentas()
-    return objOrderBook.ordenesVenta
+    def getlibroTotal(self):
+        return self.libroTotal.getTotalLibro()
+    
+    def getVentas(self):
+        return self.libroTotal.getOrdenesVentas()
+    
+    def getCompras(self):
+        return self.libroTotal.getOrdenesCompras()
