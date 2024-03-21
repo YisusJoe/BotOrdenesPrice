@@ -1,17 +1,28 @@
 
 
-def getSecciones(libro):
+def getSecciones_001(libro):
     secciones = []
 
     for seccion in libro:
         secciones.append(seccion[0][0:5])
 
-    return list(set(secciones))
+    # print(libro)
+    # print(sorted(list(set(secciones))))
+    return sorted(list(set(secciones)))
 
-def getSeccionesCantidad(secciones,Libro_compra):
+def getSecciones_01(libro):
+    secciones = []
 
+    for seccion in libro:
+        secciones.append(seccion[0][0:4])
+
+    # print(sorted(list(set(secciones))))
+    return sorted(list(set(secciones)))
+
+def getBloqueCompra(secciones,Libro_compra):
     precio = []
     cantidad = []
+    retCantidad = []
     suma = 0
     puntos =  []
     listpuntos = []
@@ -19,7 +30,8 @@ def getSeccionesCantidad(secciones,Libro_compra):
     for seccion in secciones:
         # print(f'seccion = {seccion}')
         precio.append(seccion)
-        
+        # retCantidad.append(seccion)
+
         for Lc in Libro_compra:
             
             if(Lc[0].startswith(seccion)):
@@ -28,6 +40,7 @@ def getSeccionesCantidad(secciones,Libro_compra):
         
         # print(round(suma,2))
         cantidad.append(round(suma,2))
+        retCantidad.append(round(suma,2))
         puntos = precio + cantidad
         # print(f'puntos = {puntos}')
         listpuntos.append(puntos)
@@ -36,47 +49,59 @@ def getSeccionesCantidad(secciones,Libro_compra):
         cantidad = []
         suma = 0
         
-        # print(f'punto maximo {max(listpuntos)}')
-    
-    # print(f'listapuntos = {listpuntos}')
-    return listpuntos
+    posicion = retCantidad.index(max(retCantidad))
+    bloqueMax = listpuntos[posicion]
+        
+    # print(bloqueMax)
+    return bloqueMax
 
 class MdlRangosEstrategia:
 
     def __init__(self,orderBook):
 
-        # self.cantidadCompraA = 0.0
-        # self.cantidadCompraB = 0.0
-        # self.cantidadVentaA = 0.0
-        # self.cantidadVentaB = 0.0
-        # self.rangeMaxCompra = 0.0
-        # self.rangeMinCompra = 0.0
-        # self.rangeMaxVenta = 0.0
-        # self.rangeMinVenta = 0.0
         self.libro = orderBook
-        self.B_compra = ['0.62', '10000']
-        self.A_compra = ['0.70', '1000']
-        self.B_venta = []
-        self.A_venta = []
+        # self.B_compra = ['0.62', '10000']
+        # self.A_compra = ['0.70', '1000']
+        # self.B_venta = []
+        # self.A_venta = []
 
     def getPuntosTotales(self):
         RangosCompra = {'A':self.A_compra,'B':self.B_compra}
         return RangosCompra
 
-    def getACompra(self):
-        Libro_compra = self.libro['bids']
+    def getABloque(self,cv):
+        Libro = self.libro[cv]
         secciones = []
 
-        secciones = sorted(getSecciones(Libro_compra))
-        # print(secciones)
+        # print(Libro)
+        if(cv == 'bids'):
+            secciones = sorted(getSecciones_001(Libro))
+            bloque = getBloqueCompra(secciones,Libro)
+        if(cv=='asks'):
+            secciones = sorted(getSecciones_001(Libro))
+            bloque = getBloqueCompra(secciones,Libro)
 
-        seccionCantidad = getSeccionesCantidad(secciones,Libro_compra)
-        print(seccionCantidad)
+        return bloque
 
+    def getBBloque(self,cv):
+        Libro = self.libro[cv]
+        secciones = []
+
+        # print(cv)
+        # for a in Libro:
+        #     print(a[0])
         
-        # for a in Libro_compra:    
-        #     print(a[1])
+        # for b in Libro:
+        #     print(b[1])
+       
+        if(cv == 'bids'):
+            secciones = sorted(getSecciones_01(Libro))
+            bloque = getBloqueCompra(secciones,Libro)
+        if(cv=='asks'):
+            secciones = sorted(getSecciones_01(Libro))
+            bloque = getBloqueCompra(secciones,Libro)
 
+        return bloque
 
     def getRangosEstrategia(self, orderBook):
 

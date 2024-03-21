@@ -8,11 +8,12 @@ class RangosEstrategia:
     def getPuntosTotales(self):
         pass
 
-    def getPuntosA(self):
-        return self.Rangos.getACompra()
+    def getBloqueA(self,cv):
+        return self.Rangos.getABloque(cv)
 
-    def getPuntosB(self):
-        pass
+    def getBloqueB(self,cv):
+        return self.Rangos.getBBloque(cv)
+
 
 # def getRangoEstrastegia(orderBook):
 

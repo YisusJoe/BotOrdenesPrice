@@ -14,8 +14,10 @@ api_secret = 'JfWuNLrtLaysmQxrPw6PULQyDzElRYclK8I7Hbrp6G8uSQaNRfl9YpVFIpV0CDRN'
 client = Client(api_key,api_secret)
 
 symbol = 'XRPUSDT'
+# symbol = 'MATICUSDT'
 depth = 10 # profundidad de 10 niveles
-limit = 100
+limit_A = 100
+limit_B = 1000
 exchange = 'binance_futures' # intercambio de futuros de Binance
   
 
@@ -45,7 +47,7 @@ def main():
     precio = float(ticker['price'])
     # print(f'El precio del activo es: {precio}')
 
-    Obj_libro = Libro(symbol=symbol,limit=limit)
+    Obj_libro = Libro(symbol=symbol,limit=limit_A)
     Libro_total = Obj_libro.getlibroTotal()
     Libro_ventas = Obj_libro.getVentas()
     Libro_compras = Obj_libro.getCompras()
@@ -55,11 +57,25 @@ def main():
     # print(Libro_compras)
 
     Obj_estrategia = RangosEstrategia(Libro_total)
-    Puntos_estrategia = Obj_estrategia.getPuntosTotales()
-    Puntos_A = Obj_estrategia.getPuntosA()
-    Puntos_B = Obj_estrategia.getPuntosB()
+    # Obj_estrategia_venta = RangosEstrategia(Libro_ventas)
+    # Puntos_estrategia = Obj_estrategia.getPuntosTotales()
+    
+    CompraBloque_A = Obj_estrategia.getBloqueA('bids')
+    VentaBloque_A = Obj_estrategia.getBloqueA('asks')
+    VentaBloque_B = Obj_estrategia.getBloqueB('asks')
+    CompraBloque_B = Obj_estrategia.getBloqueB('bids')
+    
+    # Puntos_B = Obj_estrategia.getPuntosB()
 
-    print(Puntos_A)
+    print(f'B_Venta {VentaBloque_B}')
+    print(f'A_Venta {VentaBloque_A}')
+    print(f'A_Compra {CompraBloque_A}')
+    print(f'B_Compra {CompraBloque_B}')
+
+    # print(CompraBloque_A)
+    # print(VentaBloque_A)
+    # print(CompraBloque_B)
+    # print(VentaBloque_B)
 
     # orderBook = orderBookController.getTotalLibro(symbol,limit)
     # rangesEstategia = rangeBookController.getRangoEstrategia(orderBook)
