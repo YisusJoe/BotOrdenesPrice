@@ -47,23 +47,20 @@ def main():
     precio = float(ticker['price'])
     # print(f'El precio del activo es: {precio}')
 
-    Obj_libro = Libro(symbol=symbol,limit=limit_A)
-    Libro_total = Obj_libro.getlibroTotal()
-    Libro_ventas = Obj_libro.getVentas()
-    Libro_compras = Obj_libro.getCompras()
+    Obj_libro_A = Libro(symbol=symbol,limit=limit_A)
+    Obj_libro_B = Libro(symbol=symbol,limit=limit_B)
+    Libro_total_A = Obj_libro_A.getlibroTotal()
+    Libro_total_B = Obj_libro_B.getlibroTotal()
+    # Libro_ventas = Obj_libro_A.getVentas()
+    # Libro_compras = Obj_libro_A.getCompras()
 
-    # print(Libro_total)
-    # print(Libro_ventas)
-    # print(Libro_compras)
-
-    Obj_estrategia = RangosEstrategia(Libro_total)
-    # Obj_estrategia_venta = RangosEstrategia(Libro_ventas)
-    # Puntos_estrategia = Obj_estrategia.getPuntosTotales()
+    Obj_estrategia_A = RangosEstrategia(Libro_total_A)
+    Obj_estrategia_B = RangosEstrategia(Libro_total_B) 
     
-    CompraBloque_A = Obj_estrategia.getBloqueA('bids')
-    VentaBloque_A = Obj_estrategia.getBloqueA('asks')
-    VentaBloque_B = Obj_estrategia.getBloqueB('asks')
-    CompraBloque_B = Obj_estrategia.getBloqueB('bids')
+    CompraBloque_A = Obj_estrategia_A.getBloqueA('bids')
+    VentaBloque_A = Obj_estrategia_A.getBloqueA('asks')
+    VentaBloque_B = Obj_estrategia_B.getBloqueB('asks')
+    CompraBloque_B = Obj_estrategia_B.getBloqueB('bids')
     
     # Puntos_B = Obj_estrategia.getPuntosB()
 
@@ -71,164 +68,6 @@ def main():
     print(f'A_Venta {VentaBloque_A}')
     print(f'A_Compra {CompraBloque_A}')
     print(f'B_Compra {CompraBloque_B}')
-
-    # print(CompraBloque_A)
-    # print(VentaBloque_A)
-    # print(CompraBloque_B)
-    # print(VentaBloque_B)
-
-    # orderBook = orderBookController.getTotalLibro(symbol,limit)
-    # rangesEstategia = rangeBookController.getRangoEstrategia(orderBook)
-
-    # rangeVenta_A = rangeBookController.getMaxOrderBook(orderBook['asks'])
-    
-    # print(rangeVenta_A)
-
-    # print('=====================================')
-
-    # #Con esto reviso que trae el libro y si la cantidad de limit es correcta
-    # i = 0
-    # for a in orderBook['asks']:
-    #     i += 1
-    #     print(a)
-
-    # print(i)
-
-    # print(f"El precio maximo de venta es: {max(orderBook['asks'])}")
-    # print(f"El precio minimo de venta es: {min(orderBook['asks'])}")
-
-    # print('=====================================')
-
-    # #Con esto reviso que trae el libro y si la cantidad de limit es correcta
-    # i = 0
-    # for a in orderBook['bids']:
-    #     i += 1
-    #     print(a)
-
-    # print(i)
-
-    # print(f"El precio maximo de compra es: {max(orderBook['bids'])}")
-    # print(f"El precio minimo de compra es: {min(orderBook['bids'])}")
-
-    # print('=====================================')
-
-    # print('-------------------------------')
-    # print(f'Precio venta B: {rangesEstategia.rangoVentaB} cantidad: {rangesEstategia.cantidadVentaB}')
-    # print(f'Precio venta A: {rangesEstategia.rangoVentaA} cantidad: {rangesEstategia.cantidadVentaA}')
-    # print(f'Precio compra A: {rangesEstategia.rangoCompraA} cantidad: {rangesEstategia.cantidadCompraA}')
-    # print(f'Precio compra B: {rangesEstategia.rangoCompraB} cantidad: {rangesEstategia.cantidadCompraB}')
-    
-    # longShort(rangesEstategia.rangoCompraA,rangesEstategia.rangoCompraB,rangesEstategia.rangoVentaA,rangesEstategia.rangoVentaB)
-
-    # while(1):
-        
-    #     ticker = client.get_symbol_ticker(symbol=symbol)
-    #     precio = float(ticker['price'])
-
-    #     fecha_actual = datetime.datetime.now()
-    #     nombre_archivo = fecha_actual.strftime("%Y-%m-%d.txt")
-    #     ruta = "./Entradas/" + nombre_archivo
-
-    #     if os.path.exists(ruta):
-
-    #         archivo = open(ruta, 'a')
-
-    #     else:
-
-    #         archivo = open(ruta, 'w')
-        
-    #     if(precio == rangesEstategia.rangoCompraA):
-            
-    #         print(f'Abri una entrada en long en el precio {rangesEstategia.rangoCompraA}, con un SL en {rangesEstategia.rangoCompraB} y TP en {rangesEstategia.rangoVentaA}')
-            
-    #         tp = rangesEstategia.rangoVentaA
-    #         sl = rangesEstategia.rangoCompraB
-
-    #         while(1): 
-
-    #             ticker = client.get_symbol_ticker(symbol=symbol)
-    #             precio = float(ticker['price'])
-    #             print(f'precioActual = {precio}, SL = {sl}, TP = {tp}')
-                
-    #             if(precio == tp):
-
-    #                 print('Entrada ganada')
-    #                 archivo.write(f'Ganada, Entrada {rangesEstategia.rangoCompraA}, SL {rangesEstategia.rangoCompraB}, TP {rangesEstategia.rangoVentaA}\n')
-    #                 orderBook = orderBookController.getTotalLibro(symbol,depth,exchange)
-    #                 # print(orderBook)
-    #                 rangesEstategia = rangeBookController.getRangoEstrategia(orderBook)
-                    
-    #                 print('-------------------------------')
-    #                 print(f'Precio: {rangesEstategia.rangoCompraA} cantidad: {rangesEstategia.cantidadCompraA}')
-    #                 print(f'Precio: {rangesEstategia.rangoCompraB} cantidad: {rangesEstategia.cantidadCompraB}')
-    #                 print(f'Precio: {rangesEstategia.rangoVentaA} cantidad: {rangesEstategia.cantidadVentaA}')
-    #                 print(f'Precio: {rangesEstategia.rangoVentaB} cantidad: {rangesEstategia.cantidadVentaB}')
-    #                 break
-    #             if(precio == sl):
-
-    #                 print('Entrada perdida')
-    #                 archivo.write(f'Perdida, Entrada {rangesEstategia.rangoCompraA}, SL {rangesEstategia.rangoCompraB}, TP {rangesEstategia.rangoVentaA}\n')
-    #                 orderBook = orderBookController.getTotalLibro(symbol,depth,exchange)
-    #                 # print(orderBook)
-    #                 rangesEstategia = rangeBookController.getRangoEstrategia(orderBook)
-                    
-    #                 print('-------------------------------')
-    #                 print(f'Precio: {rangesEstategia.rangoCompraA} cantidad: {rangesEstategia.cantidadCompraA}')
-    #                 print(f'Precio: {rangesEstategia.rangoCompraB} cantidad: {rangesEstategia.cantidadCompraB}')
-    #                 print(f'Precio: {rangesEstategia.rangoVentaA} cantidad: {rangesEstategia.cantidadVentaA}')
-    #                 print(f'Precio: {rangesEstategia.rangoVentaB} cantidad: {rangesEstategia.cantidadVentaB}')
-    #                 break
-                
-    #             time.sleep(1)
-
-    # # if(tipoDeEntrada == 'short'):
-
-    #     # ticker = client.get_symbol_ticker(symbol=symbol)
-    #     # precio = float(ticker['price'])
-
-    #     if(precio == rangesEstategia.rangoVentaA):
-        
-    #         print(f'Abri una entrada en short en el precio {rangesEstategia.rangoVentaA}, con un SL en {rangesEstategia.rangoVentaB} y TP en {rangesEstategia.rangoCompraA}')
-
-    #         tp = rangesEstategia.rangoCompraA
-    #         sl = rangesEstategia.rangoVentaB
-            
-    #         while(1):
-
-    #             ticker = client.get_symbol_ticker(symbol=symbol)
-    #             precio = float(ticker['price'])
-    #             print(f'precioActual = {precio}, SL = {sl}, TP = {tp}')
-
-    #             if(precio == tp):
-
-    #                 print('Entrada ganada')
-    #                 archivo.write(f'Ganada, Entrada {rangesEstategia.rangoVentaA}, SL {rangesEstategia.rangoVentaB}, TP {rangesEstategia.rangoCompraA}\n')
-    #                 orderBook = orderBookController.getTotalLibro(symbol,depth,exchange)
-    #     # print(orderBook)
-    #                 rangesEstategia = rangeBookController.getRangoEstrategia(orderBook)
-                    
-    #                 print('-------------------------------')
-    #                 print(f'Precio: {rangesEstategia.rangoCompraA} cantidad: {rangesEstategia.cantidadCompraA}')
-    #                 print(f'Precio: {rangesEstategia.rangoCompraB} cantidad: {rangesEstategia.cantidadCompraB}')
-    #                 print(f'Precio: {rangesEstategia.rangoVentaA} cantidad: {rangesEstategia.cantidadVentaA}')
-    #                 print(f'Precio: {rangesEstategia.rangoVentaB} cantidad: {rangesEstategia.cantidadVentaB}')
-    #                 break
-    #             if(precio == sl):
-
-    #                 print('Entrada perdida')
-    #                 archivo.write(f'Perdida, Entrada {rangesEstategia.rangoVentaA}, SL {rangesEstategia.rangoVentaB}, TP {rangesEstategia.rangoCompraA}\n')
-    #                 orderBook = orderBookController.getTotalLibro(symbol,depth,exchange)
-    #                 # print(orderBook)
-    #                 rangesEstategia = rangeBookController.getRangoEstrategia(orderBook)
-                    
-    #                 print('-------------------------------')
-    #                 print(f'Precio: {rangesEstategia.rangoCompraA} cantidad: {rangesEstategia.cantidadCompraA}')
-    #                 print(f'Precio: {rangesEstategia.rangoCompraB} cantidad: {rangesEstategia.cantidadCompraB}')
-    #                 print(f'Precio: {rangesEstategia.rangoVentaA} cantidad: {rangesEstategia.cantidadVentaA}')
-    #                 print(f'Precio: {rangesEstategia.rangoVentaB} cantidad: {rangesEstategia.cantidadVentaB}')
-    #                 break
-                
-    #             time.sleep(1)
 
     time.sleep(1)
 
