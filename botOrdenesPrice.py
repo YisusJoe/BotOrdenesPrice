@@ -38,7 +38,7 @@ def dosaUno(symbol, dolar_buy_a,dolar_buy_b,dolar_sell_a,dolar_sell_b):
     # print(f'Distancia de compra y venta A: {dis_compraventa_A}')
     # print(f'Distancia de compra A a B: {disCompras_AB}')
 
-    if((dis_compraventa_A >= 1.8*(disCompras_AB)) and (dis_compraventa_A >= 1.8*(disVentas_AB))):
+    if( ((dis_compraventa_A >= 1.8*(disCompras_AB)) and disCompras_AB > 0 ) and ((dis_compraventa_A >= 1.8*(disVentas_AB)) and disVentas_AB > 0 ) ):
         # print(f'{symbol} LONG Y SHORT')
         if(disVentas_AB < disCompras_AB):
             print(f'SHORT {symbol} E: {dolar_sell_a} SL: {dolar_sell_b} TP: {dolar_buy_a} TP2: {dolar_buy_b}')
@@ -91,6 +91,21 @@ def main():
     # print(ticker)
     # precio = float(ticker['price'])
     # print(f'El precio es: {precio}')
+    # Entrada = [0.1,0.1,0.1]
+    # fecha_actual = datetime.datetime.now()
+    # nombre_archivo = fecha_actual.strftime("%Y-%m-%d.txt")
+
+    # archivo = open(nombre_archivo, 'a')
+    # # if os.path.exists(nombre_archivo):
+
+    # # else:
+    # #     archivo = open(nombre_archivo, 'w')
+
+    # print('No pude entrar a la operacion')
+    # # archivo.write('no entre')
+    # archivo.write(f'Llegue al SL: {Entrada[1]} sin entrar a la operacion en {Entrada[0]}, TP: {Entrada[2]}\n')
+
+    # archivo.close()    
     symbols = getTickets()
     # print(symbols)
     
@@ -130,30 +145,22 @@ def main():
                     
                     fecha_actual = datetime.datetime.now()
                     nombre_archivo = fecha_actual.strftime("%Y-%m-%d.txt")
-
-                    if os.path.exists(nombre_archivo):
-                        archivo = open(nombre_archivo, 'a')
-
-                    else:
-                        archivo = open(nombre_archivo, 'w')
+                    archivo = open(nombre_archivo, 'a')
 
                     print('Entre a la operacion')
                     archivo.write(f'Entre a la operacion en {Entrada[0]}, SL: {Entrada[1]} y TP: {Entrada[2]}\n')
+                    archivo.close()
                     break
 
                 if(precio == Entrada[1]):
                     
                     fecha_actual = datetime.datetime.now()
                     nombre_archivo = fecha_actual.strftime("%Y-%m-%d.txt")
-
-                    if os.path.exists(nombre_archivo):
-                        archivo = open(nombre_archivo, 'a')
-
-                    else:
-                        archivo = open(nombre_archivo, 'w')
+                    archivo = open(nombre_archivo, 'a')
 
                     print('No pude entrar a la operacion')
                     archivo.write(f'Llegue al SL: {Entrada[1]} sin entrar a la operacion en {Entrada[0]}, TP: {Entrada[2]}\n')
+                    archivo.close()
                     break
 
         except:
