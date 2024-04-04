@@ -219,6 +219,7 @@ def main():
                                 fecha_actual = datetime.datetime.now()
                                 hora_actual = fecha_actual.strftime("%H:%M:%S")
                                 print("Gane la operacion")
+                                archivo = open(nombre_archivo, 'a')
                                 archivo.write(f'{hora_actual} | Gane la operacion, llegue al TP: {E_dosUno[3]}, entre en {E_dosUno[1]}\n')
                                 archivo.close()
                                 break
@@ -227,6 +228,7 @@ def main():
                                 fecha_actual = datetime.datetime.now()
                                 hora_actual = fecha_actual.strftime("%H:%M:%S")
                                 print("Perdi la operacion")
+                                archivo = open(nombre_archivo, 'a')
                                 archivo.write(f'{hora_actual} | Perdi la operacion, llegue al SL: {E_dosUno[2]}, entre en {E_dosUno[1]}\n')
                                 archivo.close()
                                 break
@@ -274,7 +276,8 @@ def main():
                                 fecha_actual = datetime.datetime.now()
                                 hora_actual = fecha_actual.strftime("%H:%M:%S")
                                 print("Gane la operacion")
-                                archivo.write(f'{hora_actual} | Llegue al TP: {E_dosUno[3]}, entre en {E_dosUno[1]}\n')
+                                archivo = open(nombre_archivo, 'a')
+                                archivo.write(f'{hora_actual} | Gane la operacion, llegue al TP: {E_dosUno[3]}, entre en {E_dosUno[1]}\n')
                                 archivo.close()
                                 break
                             
@@ -282,7 +285,8 @@ def main():
                                 fecha_actual = datetime.datetime.now()
                                 hora_actual = fecha_actual.strftime("%H:%M:%S")
                                 print("Perdi la operacion")
-                                archivo.write(f'{hora_actual} | Llegue al SL: {E_dosUno[2]}, entre en {E_dosUno[1]}\n')
+                                archivo = open(nombre_archivo, 'a')
+                                archivo.write(f'{hora_actual} | Perdi la operacion, llegue al SL: {E_dosUno[2]}, entre en {E_dosUno[1]}\n')
                                 archivo.close()
                                 break
                             
