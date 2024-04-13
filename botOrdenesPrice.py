@@ -38,7 +38,7 @@ def dosaUno(symbol, dolar_buy_a,dolar_buy_b,dolar_sell_a,dolar_sell_b):
     # print(f'Distancia de compra y venta A: {dis_compraventa_A}')
     # print(f'Distancia de compra A a B: {disCompras_AB}')
 
-    if( ((dis_compraventa_A >= 1.8*(disCompras_AB)) and disCompras_AB > 0) and ((dis_compraventa_A >= 1.8*(disVentas_AB)) and disVentas_AB > 0) ):
+    if( ((dis_compraventa_A >= 1.8*(disCompras_AB)) and disCompras_AB > 0.8) and ((dis_compraventa_A >= 1.8*(disVentas_AB)) and disVentas_AB > 0.8) ):
         # print(f'{symbol} LONG Y SHORT')
         if(disVentas_AB < disCompras_AB):
             print(f'SHORT {symbol} E: {dolar_sell_a} SL: {dolar_sell_b} TP: {dolar_buy_a} TP2: {dolar_buy_b}')
@@ -48,12 +48,12 @@ def dosaUno(symbol, dolar_buy_a,dolar_buy_b,dolar_sell_a,dolar_sell_b):
             print(f'LONG  {symbol} E: {dolar_buy_a} SL: {dolar_buy_b} TP: {dolar_sell_a} TP2: {dolar_sell_b}')
             return ['LONG',dolar_buy_a, dolar_buy_b, dolar_sell_a]
 
-    if(dis_compraventa_A >= 1.8*(disCompras_AB) and disCompras_AB > 0):
+    if(dis_compraventa_A >= 1.8*(disCompras_AB) and disCompras_AB > 0.8):
         # print(f'dis compraA ventaA: {dis_compraventa_A}, disCompras_AB: {disCompras_AB}; 1.8disCompras_AB {1.8*(disCompras_AB)}')
         print(f'LONG  {symbol} E: {dolar_buy_a} SL: {dolar_buy_b} TP: {dolar_sell_a} TP2: {dolar_sell_b}')
         return ['LONG',dolar_buy_a, dolar_buy_b, dolar_sell_a]
 
-    if(dis_compraventa_A >= 1.8*(disVentas_AB) and disVentas_AB > 0):
+    if(dis_compraventa_A >= 1.8*(disVentas_AB) and disVentas_AB > 0.8):
         # print(f'dis compraA ventaA: {dis_compraventa_A}, disVentas_AB: {disVentas_AB}; 1.8disVentas_AB {1.8*(disVentas_AB)}')
         print(f'SHORT {symbol} E: {dolar_sell_a} SL: {dolar_sell_b} TP: {dolar_buy_a} TP2: {dolar_buy_b}')
         return ['SHORT',dolar_sell_a, dolar_sell_b, dolar_buy_a]
@@ -120,28 +120,28 @@ def filtroEntrada(E_dosUno, symbol):
             return True
         else:
             return False
-        
+
+def logWrite(texto):
+    
+    fecha_actual = datetime.datetime.now()
+    nombre_archivo = 'Entradas/' + fecha_actual.strftime("%Y-%m-%d.txt")
+    hora_actual = fecha_actual.strftime("%H:%M:%S")
+    
+    archivo = open(nombre_archivo, 'a')
+    archivo.write(f'{hora_actual} | {texto}\n')
+    archivo.close()
+
+def getPrice(symbol): 
+    try:
+        ticker = client.futures_symbol_ticker(symbol=symbol)
+    
+        if(ticker):
+            return float(ticker['price'])
+    except:
+        pass
+  
 def main():
 
-    # ticker = client.futures_symbol_ticker(symbol='BTCUSDT')
-    # print(ticker)
-    # precio = float(ticker['price'])
-    # print(f'El precio es: {precio}')
-    # Entrada = [0.1,0.1,0.1]
-    # fecha_actual = datetime.datetime.now()
-    # nombre_archivo = 'Entradas/' + fecha_actual.strftime("%Y-%m-%d.txt")
-
-    # archivo = open(nombre_archivo, 'a')
-    # # if os.path.exists(nombre_archivo):
-
-    # # else:
-    # #     archivo = open(nombre_archivo, 'w')
-
-    # print('No pude entrar a la operacion')
-    # # archivo.write('no entre')
-    # archivo.write(f'Llegue al SL: {Entrada[1]} sin entrar a la operacion en {Entrada[0]}, TP: {Entrada[2]}\n')
-
-    # archivo.close()  
     inicio = time.time()  
     symbols = getTickets()
     fin = time.time()
@@ -178,130 +178,82 @@ def main():
             # print(f'A_Compra {CompraBloque_A}')
             # print(f'B_Compra {CompraBloque_B}\n')
             
+            tipoEntrada = E_dosUno[0]
+            Entrada = E_dosUno[1]
+            StopLoss = E_dosUno[2]
+            TakeProfit = E_dosUno[3]
+
             while(E_dosUno and F_Entrada):
                 
-                try:
-                    ticker = client.futures_symbol_ticker(symbol=symbol)
+                precio = getPrice(symbol)
                 
-                    if(ticker):
-                        precio = float(ticker['price'])
-                        # print(precio)
-                except:
-                    pass
-                
-                print(f'{symbol} | {E_dosUno[0]} | {precio} E: {E_dosUno[1]} TP: {E_dosUno[3]} SL: {E_dosUno[2]}')
-                
-                if(E_dosUno[0] == 'LONG'):
-                    if(precio <= E_dosUno[1]):
-                        
-                        fecha_actual = datetime.datetime.now()
-                        nombre_archivo = 'Entradas/' + fecha_actual.strftime("%Y-%m-%d.txt")
-                        hora_actual = fecha_actual.strftime("%H:%M:%S")
-                        archivo = open(nombre_archivo, 'a')
+                print(f'{symbol} | {tipoEntrada} | {precio} E: {Entrada} TP: {TakeProfit} SL: {StopLoss}')
+                # logWrite(f'Encontre {tipoEntrada} | {precio} E: {Entrada} TP: {TakeProfit} SL: {StopLoss}')
 
+                if(tipoEntrada == 'LONG'):
+                    
+                    if(precio <= Entrada):
+                        
                         print('Entre a la operacion')
-                        archivo.write(f'{hora_actual} | {symbol} | {E_dosUno[0]} | Entre a la operacion en {E_dosUno[1]}, SL: {E_dosUno[2]} y TP: {E_dosUno[3]}\n')
-                        archivo.close()
+                        logWrite(f'{symbol} | {tipoEntrada} | Entre a la operacion en {Entrada}, SL: {StopLoss} y TP: {TakeProfit}')
                         
                         while(True):
-                            try:
-                                ticker = client.futures_symbol_ticker(symbol=symbol)
                             
-                                if(ticker):
-                                    precio = float(ticker['price'])
-                                    # print(precio)
-                            except:
-                                pass
+                            precio = getPrice(symbol)
                             
-                            print(f'{symbol} | {E_dosUno[0]} | {precio} E: {E_dosUno[1]} TP: {E_dosUno[3]} SL: {E_dosUno[2]}')
+                            print(f'{symbol} | {tipoEntrada} | {precio} E: {Entrada} TP: {TakeProfit} SL: {StopLoss}')
                             
-                            if(precio >= E_dosUno[3]):
-                                fecha_actual = datetime.datetime.now()
-                                hora_actual = fecha_actual.strftime("%H:%M:%S")
+                            if(precio >= TakeProfit):
+                                
                                 print("Gane la operacion")
-                                archivo = open(nombre_archivo, 'a')
-                                archivo.write(f'{hora_actual} | Gane la operacion, llegue al TP: {E_dosUno[3]}, entre en {E_dosUno[1]}\n')
-                                archivo.close()
+                                logWrite(f'Gane la operacion, llegue al TP: {TakeProfit}, entre en {Entrada}')
                                 break
                             
-                            if(precio <= E_dosUno[2]):
-                                fecha_actual = datetime.datetime.now()
-                                hora_actual = fecha_actual.strftime("%H:%M:%S")
+                            if(precio <= StopLoss):
+                                
                                 print("Perdi la operacion")
-                                archivo = open(nombre_archivo, 'a')
-                                archivo.write(f'{hora_actual} | Perdi la operacion, llegue al SL: {E_dosUno[2]}, entre en {E_dosUno[1]}\n')
-                                archivo.close()
+                                logWrite(f'Perdi la operacion, llegue al SL: {StopLoss}, entre en {Entrada}\n')
                                 break
                         
                         break
                                 
 
-                    if(precio >= E_dosUno[3]):
+                    if(precio >= TakeProfit):
                         
-                        fecha_actual = datetime.datetime.now()
-                        nombre_archivo = 'Entradas/' + fecha_actual.strftime("%Y-%m-%d.txt")
-                        hora_actual = fecha_actual.strftime("%H:%M:%S")
-                        archivo = open(nombre_archivo, 'a')
-
                         print('No pude entrar a la operacion')
-                        archivo.write(f'{hora_actual} | {symbol} | {E_dosUno[0]} | Llegue a {E_dosUno[3]} sin entrar a la operacion en {E_dosUno[1]}\n')
-                        archivo.close()
+                        logWrite(f'{symbol} | {tipoEntrada} | Llegue a {TakeProfit} sin entrar a la operacion en {Entrada}')
                         break
                     
-                if(E_dosUno[0] == 'SHORT'):
-                    if(precio >= E_dosUno[1]):
+                if(tipoEntrada == 'SHORT'):
+                    if(precio >= Entrada):
                         
-                        fecha_actual = datetime.datetime.now()
-                        nombre_archivo = 'Entradas/' + fecha_actual.strftime("%Y-%m-%d.txt")
-                        hora_actual = fecha_actual.strftime("%H:%M:%S")
-                        archivo = open(nombre_archivo, 'a')
-
                         print('Entre a la operacion')
-                        archivo.write(f'{hora_actual} | {symbol} | {E_dosUno[0]} | Entre a la operacion en {E_dosUno[1]}, SL: {E_dosUno[2]} y TP: {E_dosUno[3]}\n')
-                        archivo.close()
+                        logWrite(f'{symbol} | {tipoEntrada} | Entre a la operacion en {Entrada}, SL: {StopLoss} y TP: {TakeProfit}')
                         
                         while(True):
-                            try:
-                                ticker = client.futures_symbol_ticker(symbol=symbol)
                             
-                                if(ticker):
-                                    precio = float(ticker['price'])
-                                    # print(precio)
-                            except:
-                                pass
+                            precio = getPrice(symbol)
                             
-                            print(f'{symbol} | {E_dosUno[0]} | {precio} E: {E_dosUno[1]} TP: {E_dosUno[3]} SL: {E_dosUno[2]}')
+                            print(f'{symbol} | {tipoEntrada} | {precio} E: {Entrada} TP: {TakeProfit} SL: {StopLoss}')
                             
-                            if(precio <= E_dosUno[3]):
-                                fecha_actual = datetime.datetime.now()
-                                hora_actual = fecha_actual.strftime("%H:%M:%S")
+                            if(precio <= TakeProfit):
+                                
                                 print("Gane la operacion")
-                                archivo = open(nombre_archivo, 'a')
-                                archivo.write(f'{hora_actual} | Gane la operacion, llegue al TP: {E_dosUno[3]}, entre en {E_dosUno[1]}\n')
-                                archivo.close()
+                                logWrite(f'Gane la operacion, llegue al TP: {TakeProfit}, entre en {Entrada}')
                                 break
                             
-                            if(precio >= E_dosUno[2]):
-                                fecha_actual = datetime.datetime.now()
-                                hora_actual = fecha_actual.strftime("%H:%M:%S")
+                            if(precio >= StopLoss):
+                                
                                 print("Perdi la operacion")
-                                archivo = open(nombre_archivo, 'a')
-                                archivo.write(f'{hora_actual} | Perdi la operacion, llegue al SL: {E_dosUno[2]}, entre en {E_dosUno[1]}\n')
-                                archivo.close()
+                                logWrite(f'Perdi la operacion, llegue al SL: {StopLoss}, entre en {Entrada}')
                                 break
                             
                         break
 
-                    if(precio <= E_dosUno[3]):
+                    if(precio <= TakeProfit):
                         
-                        fecha_actual = datetime.datetime.now()
-                        nombre_archivo = 'Entradas/' + fecha_actual.strftime("%Y-%m-%d.txt")
-                        hora_actual = fecha_actual.strftime("%H:%M:%S")
-                        archivo = open(nombre_archivo, 'a')
-
                         print('No pude entrar a la operacion')
-                        archivo.write(f'{hora_actual} | {symbol} | {E_dosUno[0]} | Llegue a {E_dosUno[3]} sin entrar a la operacion en {E_dosUno[1]}\n')
-                        archivo.close()
+                        logWrite(f'{symbol} | {tipoEntrada} | Llegue a {TakeProfit} sin entrar a la operacion en {Entrada}')
                         break
                     
         except:
@@ -312,8 +264,8 @@ def main():
 if __name__ == "__main__":
     
     inicio = time.time()
-    # while(True):
-    main()
+    while(True):
+        main()
     fin = time.time()
 
     print(f'El tiempo total del programa fue de: {fin - inicio}')
